@@ -2,27 +2,27 @@
 #include "fun.h"
 
 // Локальный сплайн
-double *gen_y4(double x_0, double h) {
+double *gen_y4(double x_0, double h, Function function) {
   double *y = new double[MAXMSIZE];
   for (int i = 0; i < sizeM; i++, x_0 += h) {
-    y[i] = Difr_F(x_0);
+    y[i] = function.DiffrF(x_0);
   }
   return y;
 }
 
 // Без производных
-double *gen_y3(double x_0, double h) {
+double *gen_y3(double x_0, double h, Function function) {
   double A[MAXMSIZE][MAXMSIZE] = {0},d[MAXMSIZE] = {0};
   gen_A3(A,h);
-  gen_d3(d,x_0,h);
+  gen_d3(d,x_0,h, function);
   return prog(A,d);
 }
 
-void gen_d3(double d[MAXMSIZE], double x_0, double h) {
+void gen_d3(double d[MAXMSIZE], double x_0, double h, Function function) {
   d[0] = 0;
   x_0 += h;
   for (int i = 1; i < sizeM-1; i++, x_0+=h) {
-    d[i] = (F(x_0+h)-F(x_0))/h-(F(x_0)-F(x_0-h))/h;
+    d[i] = (function.F(x_0 + h) - function.F(x_0)) / h - (function.F(x_0) - function.F(x_0 - h)) / h;
   }
   d[sizeM-1] = 0;
 }
@@ -44,20 +44,20 @@ void gen_A3(double A[MAXMSIZE][MAXMSIZE], double h) {
 }
 
 // Вторые производные на краях
-double *gen_y2(double x_0, double h) {
+double *gen_y2(double x_0, double h, Function function) {
   double A[MAXMSIZE][MAXMSIZE] = {0},d[MAXMSIZE] = {0};
-  gen_A2(A,h);
-  gen_d2(d,x_0,h);
+  gen_A2(A, h);
+  gen_d2(d, x_0, h, function);
   return prog(A,d);
 }
 
-void gen_d2(double d[MAXMSIZE], double x_0, double h) {
-  d[0] = Difr2_F(x_0);
+void gen_d2(double d[MAXMSIZE], double x_0, double h, Function function) {
+  d[0] = function.Diffr2F(x_0);
   x_0 += h;
   for (int i = 1; i < sizeM-1; i++, x_0+=h) {
-    d[i] = (F(x_0+h)-F(x_0))/h-(F(x_0)-F(x_0-h))/h;
+    d[i] = (function.F(x_0 + h) - function.F(x_0)) / h - (function.F(x_0) - function.F(x_0-h)) / h;
   }
-  d[sizeM-1] = Difr2_F(x_0);
+  d[sizeM-1] = function.Diffr2F(x_0);
 }
 
 void gen_A2(double A[MAXMSIZE][MAXMSIZE], double h) {
@@ -79,20 +79,20 @@ void gen_A2(double A[MAXMSIZE][MAXMSIZE], double h) {
 }
 
 // Первые производные на краях
-double *gen_y1(double x_0, double h) {
-  double A[MAXMSIZE][MAXMSIZE] = {0},d[MAXMSIZE] = {0};
-  gen_A1(A,h);
-  gen_d1(d,x_0,h);
-  return prog(A,d);
+double *gen_y1(double x_0, double h, Function function) {
+  double A[MAXMSIZE][MAXMSIZE] = {0}, d[MAXMSIZE] = {0};
+  gen_A1(A, h);
+  gen_d1(d,x_0, h, function);
+  return prog(A, d);
 }
 
-void gen_d1(double d[MAXMSIZE], double x_0, double h) {
-  d[0] = (F(x_0+h)-F(x_0))/h-Difr_F(x_0);
+void gen_d1(double d[MAXMSIZE], double x_0, double h, Function function) {
+  d[0] = (function.F(x_0 + h) - function.F(x_0)) / h - function.DiffrF(x_0);
   x_0 += h;
   for (int i = 1; i < sizeM-1; i++, x_0+=h) {
-    d[i] = (F(x_0+h)-F(x_0))/h-(F(x_0)-F(x_0-h))/h;
+    d[i] = (function.F(x_0 + h) - function.F(x_0)) / h - (function.F(x_0) - function.F(x_0 - h)) / h;
   }
-  d[sizeM-1] = Difr_F(x_0)-(F(x_0)-F(x_0-h))/h;
+  d[sizeM-1] = function.DiffrF(x_0) - (function.F(x_0) - function.F(x_0 - h)) / h;
 }
 
 

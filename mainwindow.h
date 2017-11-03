@@ -15,10 +15,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    double F(double x);
+    double F(double x, double a,  double b,  double c, double d);
 
 private slots:
-    void on_Action_clicked();
+    void on_buildGraphics_clicked();
 
 private:
     Ui::MainWindow *ui;

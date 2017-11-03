@@ -34,7 +34,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <assert.h>
-
+#include <unistd.h>
 #ifdef WIN32
 #include <io.h>
 #endif // #ifdef WIN32
@@ -106,7 +106,7 @@ gnuplot_ctrl * gnuplot_init(void)
     gnuplot_setstyle(handle, "points") ;
     handle->ntmp = 0 ;
 
-    handle->gnucmd = _popen("gnuplot", "w") ;
+    handle->gnucmd = popen("gnuplot", "w") ;
     if (handle->gnucmd == NULL) {
         fprintf(stderr, "error starting gnuplot, is gnuplot or gnuplot.exe in your path?\n") ;
         free(handle) ;
@@ -138,7 +138,7 @@ void gnuplot_close(gnuplot_ctrl * handle)
 {
     int     i ;
 
-    if (_pclose(handle->gnucmd) == -1) {
+    if (pclose(handle->gnucmd) == -1) {
         fprintf(stderr, "problem closing communication to gnuplot\n") ;
         return ;
     }
