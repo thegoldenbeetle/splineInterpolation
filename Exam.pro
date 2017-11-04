@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     gnuplot_i.c \
-    spline1.c \
-    fun.c
+    fun.cpp \
+    spline1.cpp
 
 HEADERS  += mainwindow.h \
     gnuplot_i.h \
     spline1.h \
-    fun.h
+    fun.h \
+    spline1.h
+
 
 FORMS    += mainwindow.ui

@@ -6,9 +6,7 @@
 #include "gnuplot_i.c"
 #include <stdio.h>
 #include "fun.h"
-#include "fun.c"
 #include "spline1.h"
-#include "spline1.c"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,30 +21,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-double MainWindow::F(double x, double a,  double b,  double c, double d)
-{
-    return a*(x*x*x) + b*(x*x) + c*x + d;
-}
-
-
 void MainWindow::on_buildGraphics_clicked()
 {
     double x0 = (ui->x_0Edit->text()).toFloat();
     double xn = (ui->x_nEdit->text()).toFloat();
     double xh = (ui->stepXEdit->text()).toFloat();
     double h = (ui->stepInterpolationEdit->text()).toFloat();
-    double a = (ui->x3Edit->text()).toFloat();
-    double b = (ui->x2Edit->text()).toFloat();
-    double c = (ui->xEdit->text()).toFloat();
-    double d = (ui->x0Edit->text()).toFloat();
-    Function function = Function(a, b, c, d);
+    std::vector<double> coefficients (4, 0);
+    coefficients[0] = (ui->x3Edit->text()).toFloat();
+    coefficients[1] = (ui->x2Edit->text()).toFloat();
+    coefficients[2] = (ui->xEdit->text()).toFloat();
+    coefficients[3] = (ui->x0Edit->text()).toFloat();
+    Function function (coefficients);
     std::ofstream ofs("data.log");
     std::ofstream ofs1("data1.log");
     std::ofstream ofs2("data2.log");
     std::ofstream ofs3("data3.log");
 
-    sizeM = (int)((xn-x0)/h+2);
-    double *y1 = gen_y1(x0, h, function), *y2 = gen_y2(x0, h, function), *y3 = gen_y3(x0, h, function);
+    sizeM = (int) ((xn - x0) / h + 2);
+    std::vector<double> y1 = gen_y1(x0, h, function);
+    std::vector<double> y2 = gen_y2(x0, h, function);
+    std::vector<double> y3 = gen_y3(x0, h, function);
 
     double x = x0;
     double  Max1=-100000, Max2=-100000, Max3=-100000;

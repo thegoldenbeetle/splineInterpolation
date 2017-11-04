@@ -1,4 +1,4 @@
-
+extern "C" {
 /*-------------------------------------------------------------------------*/
 /**
   @file     gnuplot_i.c
@@ -720,3 +720,4 @@ void gnuplot_plot_atmpfile(gnuplot_ctrl * handle, char const* tmp_filename, char
 
 /* vim: set ts=4 et sw=4 tw=75 */
 
+}

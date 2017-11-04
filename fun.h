@@ -1,19 +1,20 @@
 #ifndef FUN
 #define FUN
+#include <vector>
+
 class Function {
 public:
-    Function (double a, double b, double c, double d);
+    Function (std::vector<double> coefficients);
     double F(double x);
     double DiffrF(double x);
     double Diffr2F(double x);
 
-    double a;
-    double b;
-    double c;
-    double d;
+private:
+    const int degree = 3;
+    std::vector<double> coefficients;
 };
 
-double S(double x, double x_0, double h, double *y, Function function);
+double S(double x, double x_0, double h, std::vector<double> y, Function function);
 double Si(double x, double xi, double xi_1, double yi, double yi_1, double h, Function function);
 double Round(double X, double Delta);
 #endif
