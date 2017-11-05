@@ -1,5 +1,6 @@
 #include "spline1.h"
 #include "fun.h"
+#include <iostream>
 
 // Локальный сплайн
 std::vector<double> gen_y4(double x_0, double h, Function function) {
@@ -50,6 +51,7 @@ std::vector<std::vector<double>> gen_A3(double h) {
 std::vector<double> gen_y2(double x_0, double h, Function function) {
     std::vector<std::vector<double>> A = gen_A2(h);
     std::vector<double> d = gen_d2(x_0, h, function);
+
     return prog(A,d);
 }
 
@@ -122,7 +124,7 @@ std::vector<std::vector<double>> gen_A1(double h) {
     return A;
 }
 
-double alpha_gen(int n, std::vector<std::vector<double>> A, std::vector<double> alpha) {
+double alpha_gen(int n, std::vector<std::vector<double>> A, std::vector<double> &alpha) {
     double b_n = A[n][n];
     double c_n = A[n][n + 1];
     double res;
@@ -136,7 +138,7 @@ double alpha_gen(int n, std::vector<std::vector<double>> A, std::vector<double> 
   return res;
 }
 
-double beta_gen(int n, std::vector<std::vector<double>> A, std::vector<double> d, std::vector<double> beta, std::vector<double> alpha) {
+double beta_gen(int n, std::vector<std::vector<double>> A, std::vector<double> d, std::vector<double> &beta, std::vector<double> alpha) {
   double b_n = A[n][n];
   double d_n = d[n];
   double res;

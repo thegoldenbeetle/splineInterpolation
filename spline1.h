@@ -22,11 +22,11 @@ std::vector<std::vector<double> > gen_A1(double h);
 
 
 // Генерациия alpha до n-го номера включительно
-double alpha_gen(int n, std::vector<std::vector<double>> A, std::vector<double> alpha);
+double alpha_gen(int n, std::vector<std::vector<double>> A/*, std::vector<double> &alpha*/);
 
 // Генеряция beta до n-го номера включительно
 double beta_gen(int n, std::vector<std::vector<double> > A, std::vector<double> d,
-                std::vector<double> beta, std::vector<double> alpha);
+                std::vector<double> &beta, std::vector<double> alpha);
 
 // Вычисление трехполосной матрицы методом прогонки
 std::vector<double> prog(std::vector<std::vector<double>> A, std::vector<double> d);

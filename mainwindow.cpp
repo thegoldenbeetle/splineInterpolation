@@ -44,31 +44,30 @@ void MainWindow::on_buildGraphics_clicked()
     std::vector<double> y3 = gen_y3(x0, h, function);
 
     double x = x0;
-    double  Max1=-100000, Max2=-100000, Max3=-100000;
-    double x1,x2,x3;
+    double  Max1 = -100000, Max2 = -100000, Max3 = -100000;
     while (x <= xn)
     {
         double fx = function.F(x);
         ofs << x << " " << fx << std::endl;
+
         if (fx - S(x, x0, h, y1, function) > Max1) {
             Max1 = fx - S(x, x0, h, y1, function);
-            x1 = x;
         }
         ofs1 << x << " " << S(x, x0, h, y1, function) << std::endl;
-        if (fx - S(x, x0,h,y2, function) > Max2) {
+
+        if (fx - S(x, x0, h, y2, function) > Max2) {
             Max2 = fx - S(x, x0, h, y2, function);
-            x2 = x;
         }
         ofs2 << x << " " << S(x, x0, h, y2, function) << std::endl;
-        if (fx - S(x, x0,h,y3, function) > Max3) {
-            Max3 = fx - S(x, x0,h,y3, function);
-            x3 = x;
+
+        if (fx - S(x, x0, h, y3, function) > Max3) {
+            Max3 = fx - S(x, x0, h, y3, function);
         }
         ofs3 << x << " " << S(x, x0, h, y3, function) << std::endl;
         x = x + xh;
     }
-    std::cout << function.Diffr2F(x - xh) * h << "\n\n";
-    std::cout << Max1 << " " << x1 << "\n" << Max2 << " " << x2 << "\n" << Max3 << " " << x3 << "\n\n";
+//    std::cout << function.Diffr2F(x - xh) * h << "\n\n";
+//    std::cout << Max1 << " " << x1 << "\n" << Max2 << " " << x2 << "\n" << Max3 << " " << x3 << "\n\n";
     ofs.close();
     ofs1.close();
     ofs2.close();

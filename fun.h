@@ -9,7 +9,7 @@ public:
     double DiffrF(double x);
     double Diffr2F(double x);
 
-private:
+//private:
     const int degree = 3;
     std::vector<double> coefficients;
 };
