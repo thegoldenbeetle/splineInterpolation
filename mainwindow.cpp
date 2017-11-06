@@ -38,10 +38,11 @@ void MainWindow::on_buildGraphics_clicked()
     std::ofstream ofs2("data2.log");
     std::ofstream ofs3("data3.log");
 
-    sizeM = (int) ((xn - x0) / h + 2);
-    std::vector<double> y1 = gen_y1(x0, h, function);
-    std::vector<double> y2 = gen_y2(x0, h, function);
-    std::vector<double> y3 = gen_y3(x0, h, function);
+    Spline spline(x0, h, function);
+
+    std::vector<double> y1 = spline.gen_y1();
+    std::vector<double> y2 = spline.gen_y2();
+    std::vector<double> y3 = spline.gen_y3();
 
     double x = x0;
     double  Max1 = -100000, Max2 = -100000, Max3 = -100000;
@@ -50,24 +51,22 @@ void MainWindow::on_buildGraphics_clicked()
         double fx = function.F(x);
         ofs << x << " " << fx << std::endl;
 
-        if (fx - S(x, x0, h, y1, function) > Max1) {
-            Max1 = fx - S(x, x0, h, y1, function);
+        if (fx - spline.S(x, y1) > Max1) {
+            Max1 = fx - spline.S(x, y1);
         }
-        ofs1 << x << " " << S(x, x0, h, y1, function) << std::endl;
+        ofs1 << x << " " << spline.S(x, y1) << std::endl;
 
-        if (fx - S(x, x0, h, y2, function) > Max2) {
-            Max2 = fx - S(x, x0, h, y2, function);
+        if (fx - spline.S(x, y2) > Max2) {
+            Max2 = fx - spline.S(x, y2);
         }
-        ofs2 << x << " " << S(x, x0, h, y2, function) << std::endl;
+        ofs2 << x << " " << spline.S(x, y2) << std::endl;
 
-        if (fx - S(x, x0, h, y3, function) > Max3) {
-            Max3 = fx - S(x, x0, h, y3, function);
+        if (fx - spline.S(x, y3) > Max3) {
+            Max3 = fx - spline.S(x, y3);
         }
-        ofs3 << x << " " << S(x, x0, h, y3, function) << std::endl;
+        ofs3 << x << " " << spline.S(x, y3) << std::endl;
         x = x + xh;
     }
-//    std::cout << function.Diffr2F(x - xh) * h << "\n\n";
-//    std::cout << Max1 << " " << x1 << "\n" << Max2 << " " << x2 << "\n" << Max3 << " " << x3 << "\n\n";
     ofs.close();
     ofs1.close();
     ofs2.close();
