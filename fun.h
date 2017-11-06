@@ -9,8 +9,8 @@ public:
     double DiffrF(double x);
     double Diffr2F(double x);
 
-//private:
-    const int degree = 3;
+private:
+    const unsigned short degree = 3;
     std::vector<double> coefficients;
 };
 #endif

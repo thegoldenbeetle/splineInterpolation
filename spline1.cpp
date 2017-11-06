@@ -2,11 +2,22 @@
 #include "fun.h"
 #include <iostream>
 
+std::vector<double> Spline::gen_y(unsigned short way) {
+    switch (way) {
+    case 1:
+        return gen_y1();
+    case 2:
+        return gen_y2();
+    case 3:
+        return gen_y3();
+    }
+}
+
 // Локальный сплайн
 std::vector<double> Spline::gen_y4() {
     std::vector<double> y(MAXMSIZE, 0);
     double x_0 = Spline::x_0;
-    for (int i = 0; i < sizeM; i++, x_0 += h) {
+    for (unsigned i = 0; i < sizeM; i++, x_0 += h) {
         y[i] = function.DiffrF(x_0);
     }
     return y;
@@ -24,7 +35,7 @@ std::vector<double> Spline::gen_d3() {
     d[0] = 0;
     double x_0 = Spline::x_0;
     x_0 += h;
-    for (int i = 1; i < sizeM - 1; i++, x_0 += h) {
+    for (unsigned i = 1; i < sizeM - 1; i++, x_0 += h) {
         d[i] = (function.F(x_0 + h) - function.F(x_0)) / h - (function.F(x_0) - function.F(x_0 - h)) / h;
     }
     d[sizeM - 1] = 0;
@@ -37,7 +48,7 @@ std::vector<std::vector<double>> Spline::gen_A3() {
     A[0][1] = 0;
     A[1][0] = 4 * h;
     A[1][1] = h;
-    for (int i = 2; i < sizeM - 2; i++) {
+    for (unsigned i = 2; i < sizeM - 2; i++) {
         A[i][i - 1] = h;
         A[i][i] = 4 * h;
         A[i][i + 1] = h;
@@ -62,7 +73,7 @@ std::vector<double> Spline::gen_d2() {
     d[0] = function.Diffr2F(x_0);
     double x_0 = Spline::x_0;
     x_0 += h;
-    for (int i = 1; i < sizeM-1; i++, x_0+=h) {
+    for (unsigned i = 1; i < sizeM-1; i++, x_0+=h) {
         d[i] = (function.F(x_0 + h) - function.F(x_0)) / h - (function.F(x_0) - function.F(x_0-h)) / h;
     }
     d[sizeM - 1] = function.Diffr2F(x_0);
@@ -76,7 +87,7 @@ std::vector<std::vector<double>> Spline::gen_A2() {
 
     A[1][0] = 4 * h;
     A[1][1] = h;
-    for (int i = 2; i < sizeM-2; i++) {
+    for (unsigned i = 2; i < sizeM-2; i++) {
         A[i][i - 1] = h;
         A[i][i] = 4 * h;
         A[i][i + 1] = h;
@@ -101,7 +112,7 @@ std::vector<double> Spline::gen_d1() {
     d[0] = (function.F(x_0 + h) - function.F(x_0)) / h - function.DiffrF(x_0);
     double x_0 = Spline::x_0;
     x_0 += h;
-    for (int i = 1; i < sizeM-1; i++, x_0+=h) {
+    for (unsigned i = 1; i < sizeM-1; i++, x_0+=h) {
         d[i] = (function.F(x_0 + h) - function.F(x_0)) / h - (function.F(x_0) - function.F(x_0 - h)) / h;
     }
     d[sizeM - 1] = function.DiffrF(x_0) - (function.F(x_0) - function.F(x_0 - h)) / h;
@@ -115,7 +126,7 @@ std::vector<std::vector<double>> Spline::gen_A1() {
 
     A[1][0] = 4 * h;
     A[1][1] = h;
-    for (int i = 2; i < sizeM - 2; i++){
+    for (unsigned i = 2; i < sizeM - 2; i++){
         A[i][i-1] = h;
         A[i][i] = 4 * h;
         A[i][i + 1] = h;

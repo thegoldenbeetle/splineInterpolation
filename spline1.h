@@ -10,6 +10,8 @@ public:
     Spline(double x_0, double h, Function function):
         x_0(x_0), h(h), function(function) {}
 
+    std::vector<double> gen_y(unsigned short way);
+
     std::vector<double> gen_y4();
 
     std::vector<double> gen_y3();
@@ -24,6 +26,10 @@ public:
     std::vector<double> gen_d1();
     std::vector<std::vector<double> > gen_A1();
 
+    double S(double x, std::vector<double> y);
+    double Si(double x, double xi, double xi_1, double yi, double yi_1);
+
+private:
     // Генерациия alpha до n-го номера включительно
     double alpha_gen(int n, std::vector<std::vector<double>> A, std::vector<double> &alpha);
 
@@ -34,15 +40,12 @@ public:
     // Вычисление трехполосной матрицы методом прогонки
     std::vector<double> prog(std::vector<std::vector<double>> A, std::vector<double> d);
 
-    double S(double x, std::vector<double> y);
-    double Si(double x, double xi, double xi_1, double yi, double yi_1);
-
     double x_0;
     double h;
     Function function;
 
     // Размер матрицы решений
-    static const int sizeM = MAXMSIZE;
+    static const unsigned sizeM = MAXMSIZE;
 };
 
 #endif

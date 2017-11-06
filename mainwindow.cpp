@@ -10,28 +10,27 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_buildGraphics_clicked()
-{
+void MainWindow::on_buildGraphics_clicked() {
+    const int degree = 3;
+    const int numOfIWays = 3;
     double x0 = (ui->x_0Edit->text()).toFloat();
     double xn = (ui->x_nEdit->text()).toFloat();
     double xh = (ui->stepXEdit->text()).toFloat();
     double h = (ui->stepInterpolationEdit->text()).toFloat();
-    std::vector<double> coefficients (4, 0);
-    coefficients[0] = (ui->x3Edit->text()).toFloat();
-    coefficients[1] = (ui->x2Edit->text()).toFloat();
-    coefficients[2] = (ui->xEdit->text()).toFloat();
-    coefficients[3] = (ui->x0Edit->text()).toFloat();
+    std::vector<double> coefficients (degree + 1, 0);
+    coefficients[3] = (ui->x3Edit->text()).toFloat();
+    coefficients[2] = (ui->x2Edit->text()).toFloat();
+    coefficients[1] = (ui->xEdit->text()).toFloat();
+    coefficients[0] = (ui->x0Edit->text()).toFloat();
     Function function (coefficients);
     std::ofstream ofs("data.log");
     std::ofstream ofs1("data1.log");
@@ -40,31 +39,32 @@ void MainWindow::on_buildGraphics_clicked()
 
     Spline spline(x0, h, function);
 
-    std::vector<double> y1 = spline.gen_y1();
-    std::vector<double> y2 = spline.gen_y2();
-    std::vector<double> y3 = spline.gen_y3();
+    std::vector<std::vector<double>> y(numOfIWays + 1, std::vector<double> ());
+    for (int i = 1; i < y.size(); i++) {
+        y[i] = spline.gen_y(i);
+    }
 
     double x = x0;
     double  Max1 = -100000, Max2 = -100000, Max3 = -100000;
-    while (x <= xn)
-    {
+    while (x <= xn) {
+
         double fx = function.F(x);
         ofs << x << " " << fx << std::endl;
 
-        if (fx - spline.S(x, y1) > Max1) {
-            Max1 = fx - spline.S(x, y1);
+        if (fx - spline.S(x, y[1]) > Max1) {
+            Max1 = fx - spline.S(x, y[1]);
         }
-        ofs1 << x << " " << spline.S(x, y1) << std::endl;
+        ofs1 << x << " " << spline.S(x, y[1]) << std::endl;
 
-        if (fx - spline.S(x, y2) > Max2) {
-            Max2 = fx - spline.S(x, y2);
+        if (fx - spline.S(x, y[2]) > Max2) {
+            Max2 = fx - spline.S(x, y[2]);
         }
-        ofs2 << x << " " << spline.S(x, y2) << std::endl;
+        ofs2 << x << " " << spline.S(x, y[2]) << std::endl;
 
-        if (fx - spline.S(x, y3) > Max3) {
-            Max3 = fx - spline.S(x, y3);
+        if (fx - spline.S(x, y[3]) > Max3) {
+            Max3 = fx - spline.S(x, y[3]);
         }
-        ofs3 << x << " " << spline.S(x, y3) << std::endl;
+        ofs3 << x << " " << spline.S(x, y[3]) << std::endl;
         x = x + xh;
     }
     ofs.close();
